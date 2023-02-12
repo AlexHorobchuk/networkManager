@@ -100,12 +100,14 @@ class JokeDetailVC: UIViewController {
         view.addSubview(jokeDateLabel)
         jokeDateLabel.font = .preferredFont(forTextStyle: .body)
         jokeDateLabel.numberOfLines = 2
+        jokeDateLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         jokeDateLabel.adjustsFontSizeToFitWidth = true
         jokeDateLabel.textAlignment = .center
     }
     
     func setupJokeCategoryLabel() {
         view.addSubview(jokeCategoryLabel)
+        jokeCategoryLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         jokeCategoryLabel.font = .preferredFont(forTextStyle: .body)
         jokeCategoryLabel.textAlignment = .center
         jokeCategoryLabel.adjustsFontSizeToFitWidth = true
@@ -148,7 +150,7 @@ class JokeDetailVC: UIViewController {
         view.addSubview(vStack)
         vStack.axis = .vertical
         vStack.spacing = 10
-        vStack.alignment = .leading
+        vStack.alignment = .center
         vStack.distribution = .fillProportionally
         [jokeTextLabel, jokeDateLabel, jokeCategoryLabel].forEach { subview in
             vStack.addArrangedSubview(subview)
