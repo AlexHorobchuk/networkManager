@@ -12,6 +12,7 @@ class JokeCell: UITableViewCell {
     var categoryLabel = UILabel()
     var jokeLabel = UILabel()
     var dateLabel = UILabel()
+    var vStack = UIStackView()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -19,6 +20,7 @@ class JokeCell: UITableViewCell {
         configureJokeLable()
         configureDateLabel()
         configureCategoryLabel()
+        setupVStack()
     }
     
     required init?(coder: NSCoder) {
@@ -34,33 +36,33 @@ class JokeCell: UITableViewCell {
     func configureJokeLable() {
         addSubview(jokeLabel)
         jokeLabel.font = .preferredFont(forTextStyle: .title1)
-        jokeLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            jokeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            jokeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            jokeLabel.topAnchor.constraint(equalTo: topAnchor),
-            jokeLabel.bottomAnchor.constraint(equalTo: centerYAnchor)])
     }
     
     func configureDateLabel() {
         addSubview(dateLabel)
         dateLabel.font = .preferredFont(forTextStyle: .caption2)
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            dateLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            dateLabel.topAnchor.constraint(equalTo: jokeLabel.bottomAnchor),
-            dateLabel.heightAnchor.constraint(equalToConstant: self.frame.height * 0.25)])
     }
    
     func configureCategoryLabel() {
         addSubview(categoryLabel)
         categoryLabel.font = .preferredFont(forTextStyle: .caption2)
-        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            categoryLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            categoryLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
-            categoryLabel.bottomAnchor.constraint(equalTo: bottomAnchor)])
             }
+    
+    func setupVStack() {
+        addSubview(vStack)
+        vStack.axis = .vertical
+        vStack.spacing = 10
+        vStack.alignment = .leading
+        vStack.distribution = .fillProportionally
+        [jokeLabel, dateLabel, categoryLabel].forEach { subview in
+            vStack.addArrangedSubview(subview)
+        }
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            vStack.topAnchor.constraint(equalTo: topAnchor),
+            vStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            vStack.leftAnchor.constraint(equalTo: leftAnchor),
+            vStack.rightAnchor.constraint(equalTo: rightAnchor)])
+        
+    }
 }

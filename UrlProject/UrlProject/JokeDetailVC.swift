@@ -20,7 +20,6 @@ class JokeDetailVC: UIViewController {
     struct JokeDetailVCData {
         var joke: JokeData?
         var category: String?
-        var action: (() -> ())?
     }
     
     var jokeVCData: JokeDetailVCData?
@@ -28,6 +27,7 @@ class JokeDetailVC: UIViewController {
     var jokeDateLabel = UILabel()
     var jokeCategoryLabel = UILabel()
     var saveButton = UIButton()
+    var vStack = UIStackView()
     
     
     var joke: JokeData? {
@@ -45,6 +45,7 @@ class JokeDetailVC: UIViewController {
         setupJokeDateLabel()
         setupJokeCategoryLabel()
         setupSaveButton()
+        setupVStack()
         fetchJoke()
         if jokeVCData?.joke != nil {
             checkIfSaved()
@@ -91,38 +92,24 @@ class JokeDetailVC: UIViewController {
         view.addSubview(jokeTextLabel)
         jokeTextLabel.font = .preferredFont(forTextStyle: .title1)
         jokeTextLabel.numberOfLines = 0
+        jokeTextLabel.adjustsFontSizeToFitWidth = true
         jokeTextLabel.textAlignment = .center
-        jokeTextLabel.center = view.center
-        jokeTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            jokeTextLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            jokeTextLabel.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-            jokeTextLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            jokeTextLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])
     }
     
     func setupJokeDateLabel() {
         view.addSubview(jokeDateLabel)
         jokeDateLabel.font = .preferredFont(forTextStyle: .body)
+        jokeDateLabel.numberOfLines = 2
+        jokeDateLabel.adjustsFontSizeToFitWidth = true
         jokeDateLabel.textAlignment = .center
-        jokeDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            jokeDateLabel.heightAnchor.constraint(equalToConstant: 60),
-            jokeDateLabel.topAnchor.constraint(equalTo: jokeTextLabel.bottomAnchor),
-            jokeDateLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            jokeDateLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])
     }
     
     func setupJokeCategoryLabel() {
         view.addSubview(jokeCategoryLabel)
         jokeCategoryLabel.font = .preferredFont(forTextStyle: .body)
         jokeCategoryLabel.textAlignment = .center
-        jokeCategoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            jokeCategoryLabel.heightAnchor.constraint(equalToConstant: 60),
-            jokeCategoryLabel.topAnchor.constraint(equalTo: jokeDateLabel.bottomAnchor),
-            jokeCategoryLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            jokeCategoryLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)])
+        jokeCategoryLabel.adjustsFontSizeToFitWidth = true
+        jokeCategoryLabel.numberOfLines = 0
     }
     
     func setupSaveButtonColor(with color: UIColor) {
@@ -137,8 +124,9 @@ class JokeDetailVC: UIViewController {
         self.setupSaveButtonColor(with: .systemGray)
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-           saveButton.topAnchor.constraint(equalTo: jokeCategoryLabel.bottomAnchor),
-           saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)])
+            saveButton.heightAnchor.constraint(equalToConstant: 100),
+            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)])
         saveButton.addTarget(self, action: #selector(saveJoke), for: .touchUpInside)
     }
     
@@ -154,11 +142,23 @@ class JokeDetailVC: UIViewController {
                 saveButton.titleLabel?.text = "Save"
             }
         }
+        TableViewUpdateManager.shared.updateFavoriteJokes()
     }
-
-    deinit {
-        if jokeVCData?.action != nil {
-            jokeVCData?.action!()
+    func setupVStack() {
+        view.addSubview(vStack)
+        vStack.axis = .vertical
+        vStack.spacing = 10
+        vStack.alignment = .leading
+        vStack.distribution = .fillProportionally
+        [jokeTextLabel, jokeDateLabel, jokeCategoryLabel].forEach { subview in
+            vStack.addArrangedSubview(subview)
         }
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            vStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            vStack.bottomAnchor.constraint(equalTo: saveButton.topAnchor),
+            vStack.leftAnchor.constraint(equalTo: view.leftAnchor),
+            vStack.rightAnchor.constraint(equalTo: view.rightAnchor)])
+        
     }
 }

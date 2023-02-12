@@ -41,8 +41,9 @@ class CategoryVC: UIViewController {
     func configureTableView() {
         view.addSubview(tableView)
         setTableViewDelegates()
-        tableView.rowHeight = 60
-        tableView.register(CategoryCell.self, forCellReuseIdentifier: "Category")        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 60
+        tableView.register(CategoryCell.self, forCellReuseIdentifier: "Category")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),

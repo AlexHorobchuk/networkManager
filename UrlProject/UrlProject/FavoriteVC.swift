@@ -19,19 +19,15 @@ class FavoriteVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         configureTableView()
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        favoriteJokes = JokeSavingManager.shared.getAllSavedJokes()
+        createObserver()
     }
     
-    func reloadTableView() {
-        favoriteJokes = JokeSavingManager.shared.getAllSavedJokes()
-    }
     
     func configureTableView() {
         view.addSubview(tableView)
         setTableViewDelegates()
-        tableView.rowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 100
         tableView.register(JokeCell.self, forCellReuseIdentifier: "Joke")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -45,6 +41,17 @@ class FavoriteVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
     }
+    func createObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: .updateSavedJokes, object: nil)
+    }
+    
+    @objc func reloadTableView(_ notification: NSNotification) {
+        tableView.reloadData()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 
@@ -56,7 +63,7 @@ extension FavoriteVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let data = JokeDetailVC.JokeDetailVCData(joke: favoriteJokes[indexPath.row], action: reloadTableView)
+        let data = JokeDetailVC.JokeDetailVCData(joke: favoriteJokes[indexPath.row])
         let vc = JokeDetailVC(jokeVCData: data)
         self.navigationController?.pushViewController(vc, animated: true)
     }

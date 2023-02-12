@@ -35,7 +35,7 @@ struct JokeNetworkManager {
     }
     
     func fetchData(category: String? = nil, searchForWord search: String? = nil, fetchingtype: fetchingType, completion: @escaping (Result<Any, Error>) -> Void) {
-        let link = JokeNetworkManager.getUrl(requestType: fetchingtype, category: category, searchForWord: search)
+        let link = self.getUrl(requestType: fetchingtype, category: category, searchForWord: search)
         let url = URL(string: link)!
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -81,7 +81,7 @@ struct JokeNetworkManager {
         }.resume()
     }
     
-    static func getUrl(requestType: fetchingType, category: String?, searchForWord: String?) -> String {
+    func getUrl(requestType: fetchingType, category: String?, searchForWord: String?) -> String {
         switch requestType {
         case .joke:
             guard let category = category else {

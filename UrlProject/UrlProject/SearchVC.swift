@@ -33,6 +33,7 @@ class SearchVC: UIViewController {
         searchField.textAlignment = .center
         searchField.layer.borderWidth = 3
         searchField.layer.cornerRadius = 10
+        searchField.layer.borderColor = UIColor.label.cgColor
         searchField.addTarget(self, action: #selector(fetchSearch), for: .editingDidEndOnExit)
         searchField.backgroundColor = .systemBackground
         searchField.translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +41,7 @@ class SearchVC: UIViewController {
             searchField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
             searchField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
             searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
-            searchField.heightAnchor.constraint(equalToConstant: 50)])
+            searchField.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)])
         
     }
     
@@ -75,12 +76,13 @@ class SearchVC: UIViewController {
     func configureTableView() {
         view.addSubview(tableView)
         setTableViewDelegates()
-        tableView.rowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 100
         tableView.register(JokeCell.self, forCellReuseIdentifier: "Search")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: searchField.bottomAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)])
     }

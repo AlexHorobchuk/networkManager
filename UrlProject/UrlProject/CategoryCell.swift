@@ -15,6 +15,7 @@ class CategoryCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(categoryTitleLabel)
         configureCategoryTitleLable()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -28,10 +29,10 @@ class CategoryCell: UITableViewCell {
     
     func configureCategoryTitleLable() {
         categoryTitleLabel.numberOfLines = 0
-        categoryTitleLabel.adjustsFontSizeToFitWidth = true
         categoryTitleLabel.font = .preferredFont(forTextStyle: .title1)
         categoryTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            categoryTitleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 60),
             categoryTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             categoryTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             categoryTitleLabel.topAnchor.constraint(equalTo: topAnchor),
