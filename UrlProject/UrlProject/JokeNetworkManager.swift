@@ -28,11 +28,6 @@ struct JokeNetworkManager {
     let jokeOfCategoryUrl = "https://api.chucknorris.io/jokes/random?category="
     let search = "https://api.chucknorris.io/jokes/search?query="
     
-    enum fetchingType {
-        case joke
-        case categorys
-        case search
-    }
     
     func fetchSearchedJokes(for word: String, completion: @escaping (Result<SearchData, Error>) -> Void) {
         let link = JokeNetworkManager.shared.search + word
