@@ -67,10 +67,9 @@ class JokeDetailVC: UIViewController {
         if jokeVCData?.joke != nil {
             joke = jokeVCData?.joke
         } else {
-            JokeNetworkManager.shared.fetchData(category: jokeVCData?.category ,fetchingtype: .joke) { [weak self] result in
+            JokeNetworkManager.shared.fetchJoke(category: jokeVCData?.category) { [weak self] result in
                 switch result {
                 case .success(let joke):
-                    let joke = joke as! JokeData
                     self?.joke = joke
                     self!.checkIfSaved()
                 case .failure(let error):
@@ -120,6 +119,7 @@ class JokeDetailVC: UIViewController {
         let buttonImageConfig = image?.withTintColor(color, renderingMode: .alwaysOriginal)
         saveButton.setImage(buttonImageConfig, for: .normal)
     }
+    
     func setupSaveButton() {
         view.addSubview(saveButton)
         saveButton.titleLabel?.text = "Save"

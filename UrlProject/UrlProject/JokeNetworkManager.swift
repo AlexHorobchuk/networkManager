@@ -34,8 +34,23 @@ struct JokeNetworkManager {
         case search
     }
     
-    func fetchData(category: String? = nil, searchForWord search: String? = nil, fetchingtype: fetchingType, completion: @escaping (Result<Any, Error>) -> Void) {
-        let link = self.getUrl(requestType: fetchingtype, category: category, searchForWord: search)
+    func fetchSearchedJokes(for word: String, completion: @escaping (Result<SearchData, Error>) -> Void) {
+        let link = JokeNetworkManager.shared.search + word
+        JokeNetworkManager.shared.fetchData(link: link, completion: completion)
+    }
+    
+    func fetchCategorys(completion: @escaping (Result<[String], Error>) -> Void) {
+        let link = JokeNetworkManager.shared.categorysUrl
+        JokeNetworkManager.shared.fetchData(link: link, completion: completion)
+    }
+    
+    func fetchJoke(category: String? = nil, completion: @escaping (Result<JokeData, Error>) -> Void) {
+        let link = category == nil ? JokeNetworkManager.shared.randomJokeUrl :
+        JokeNetworkManager.shared.jokeOfCategoryUrl + category!
+        JokeNetworkManager.shared.fetchData(link: link, completion: completion)
+    }
+    
+    func fetchData<T: Decodable>(link: String, completion: @escaping (Result<T, Error>) -> Void) {
         let url = URL(string: link)!
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -55,23 +70,9 @@ struct JokeNetworkManager {
             }
             
             do {
-                switch fetchingtype {
-                    
-                case .joke:
-                    let jokeData = try JSONDecoder().decode(JokeData.self, from: data)
-                    DispatchQueue.main.async {
-                        completion(.success(jokeData))
-                    }
-                case .categorys:
-                    let categorysData = try JSONDecoder().decode([String].self, from: data)
-                    DispatchQueue.main.async {
-                        completion(.success(categorysData))
-                    }
-                case .search:
-                    let searchedJoke = try JSONDecoder().decode(SearchData.self, from: data)
-                    DispatchQueue.main.async {
-                        completion(.success(searchedJoke))
-                    }
+                let jokeData = try JSONDecoder().decode(T.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(jokeData))
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -80,20 +81,5 @@ struct JokeNetworkManager {
             }
         }.resume()
     }
-    
-    func getUrl(requestType: fetchingType, category: String?, searchForWord: String?) -> String {
-        switch requestType {
-        case .joke:
-            guard let category = category else {
-                return JokeNetworkManager.shared.randomJokeUrl
-            }
-            return JokeNetworkManager.shared.jokeOfCategoryUrl + category
-        case .categorys:
-            return JokeNetworkManager.shared.categorysUrl
-        case .search:
-            return JokeNetworkManager.shared.search + searchForWord!
-        }
-    }
-    
 }
 

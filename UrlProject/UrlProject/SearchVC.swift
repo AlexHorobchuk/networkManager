@@ -47,13 +47,9 @@ class SearchVC: UIViewController {
     
     @objc func fetchSearch(sender: UITextField!) {
         let searchRequest = sender.text!.filter { $0.isLetter }
-        JokeNetworkManager.shared.fetchData(searchForWord: searchRequest,fetchingtype: .search) { [weak self] result in
+        JokeNetworkManager.shared.fetchSearchedJokes(for: searchRequest) { [weak self] result in
             switch result {
             case .success(let searchResult):
-                guard let searchResult = searchResult as? SearchData else {
-                    print("SearchVC, fetchSearch, couldnt cast search to SearchData")
-                    return
-                }
                 let search = searchResult.result
                 if search.count != 0 {
                     self?.searchData = search

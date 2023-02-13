@@ -46,7 +46,7 @@ class FavoriteVC: UIViewController {
     }
     
     @objc func reloadTableView(_ notification: NSNotification) {
-        tableView.reloadData()
+        favoriteJokes = JokeSavingManager.shared.getAllSavedJokes()
     }
     
     deinit {

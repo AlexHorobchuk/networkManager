@@ -24,10 +24,10 @@ class CategoryVC: UIViewController {
     }
     
     func fetchCategories() {
-        JokeNetworkManager.shared.fetchData(fetchingtype: .categorys) { [weak self] result in
+        JokeNetworkManager.shared.fetchCategorys() { [weak self] result in
             switch result {
             case .success(let categories):
-                self?.categories = categories as! [String]
+                self?.categories = categories
             case .failure(let error):
                 let alert = UIAlertController(title: "Ooops", message: error.localizedDescription, preferredStyle: .alert)
                 alert.addAction(.init(title: "Ok", style: .cancel))
